@@ -1,4 +1,4 @@
-# IPB Bike Center (Next + Clerk + TailwindCSS + Shadcn)
+# IPB Bike Center (Next + Clerk + Shadcn)
 
 ---
 
