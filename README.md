@@ -65,4 +65,4 @@ MIT License. Feel free to fork and build your own ✌️
 
 ---
 
-Dibuat oleh Kelompok 1.
+Dibuat oleh Kelompok 1
