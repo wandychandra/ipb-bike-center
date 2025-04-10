@@ -2,7 +2,7 @@
 
 ---
 
-## ⚙️ Tech Stack yang kami gunakan
+## Tech Stack yang kami gunakan
 
 - **Framework**: [Next.js](https://nextjs.org/)
 - **Database**: on progress
@@ -15,7 +15,7 @@
 
 ---
 
-## 🛠️ Getting Started
+## Getting Started
 
 Pertama, clone/salin repositori nya:
 
@@ -42,7 +42,7 @@ Aplikasi ini akan berjalan pada [http://localhost:3000](http://localhost:3000) s
 
 ---
 
-## 💡 Contributing
+## Kontribusi
 
 1. Fork repositori ini
 2. Buat branch baru:  
@@ -59,7 +59,7 @@ Aplikasi ini akan berjalan pada [http://localhost:3000](http://localhost:3000) s
 
 ---
 
-## 📄 License
+## 📄 Lisensi
 
 MIT License. Feel free to fork and build your own ✌️
 
