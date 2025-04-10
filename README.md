@@ -17,14 +17,14 @@
 
 ## Getting Started
 
-Pertama, clone/salin repositori nya:
+1. Pertama, clone/salin repositori nya:
 
 ```bash
 git clone https://github.com/raihanpka/ipb-bike-center.git
 cd ipb-bike-center
 ```
 
-Lalu, Install dependencies nya:
+2. Lalu, Install dependencies nya:
 
 ```bash
 npm install
@@ -32,25 +32,25 @@ npm install
 yarn
 ```
 
-## Setup Environment Variables
+Setup Environment Variables
 
-1. Go to [Clerk](https://clerk.com)
-2. Create a new project
-3. Enable **Authentication** (Email/Password or other provider)
-4. Copy your Clerk API keys and paste them into a `.env.local` file:
+- Go to [Clerk](https://clerk.com)
+- Create a new project
+- Enable **Authentication** (Email/Password or other provider)
+- Copy your Clerk API keys and paste them into a `.env.local` file:
 
 ```env
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your-clerk-publishable-key
 CLERK_SECRET_KEY=your-clerk-secret-key
 ```
 
-Setelah terisi, untuk memulai server untuk development jalankan:
+3. Setelah terisi, untuk memulai server development di lokal jalankan:
 
 ```bash
 npm run dev
 ```
 
-Aplikasi ini akan berjalan pada [http://localhost:3000](http://localhost:3000) secara lokal
+4. Aplikasi ini akan berjalan pada [http://localhost:3000](http://localhost:3000) secara lokal
 
 ---
 
