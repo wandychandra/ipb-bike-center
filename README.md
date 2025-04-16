@@ -27,9 +27,9 @@ cd ipb-bike-center
 2. Lalu, Install dependencies nya:
 
 ```bash
-npm install
+npm install 
 # atau
-yarn
+pnpm install (jika punya pnpm di device kamu)
 ```
 
 Setup Environment Variables
