@@ -30,10 +30,10 @@ export default async function Page(props: pageProps) {
         <div className='flex items-start justify-between'>
           <Heading
             title='Manajemen Data Sepeda'
-            description='Mengelola data inventaris sepeda yang tersedia di gudang'
+            description='Mengelola inventaris sepeda yang tersedia di gudang yang dikelola oleh DUI IPB'
           />
           <Link
-            href='/dashboard/data-sepeda/new'
+            href='/dashboard/data-sepeda/baru'
             className={cn(buttonVariants(), 'text-xs md:text-sm')}
           >
             <IconPlus className='mr-2 h-4 w-4' /> Tambah Baru

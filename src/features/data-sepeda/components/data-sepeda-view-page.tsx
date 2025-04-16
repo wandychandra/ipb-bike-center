@@ -12,7 +12,7 @@ export default async function DataSepedaViewPage({
   let sepeda = null;
   let pageTitle = 'Memasukkan Data Sepeda Baru';
 
-  if (nomorSeri !== 'new') {
+  if (nomorSeri !== 'baru') {
     const data = await ambilDataSepeda.getSepedaByNomorSeri(nomorSeri);
     sepeda = data.sepeda as DataSepeda;
     if (!sepeda) {

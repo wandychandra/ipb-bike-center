@@ -9,15 +9,15 @@ export function SignUpViewPage() {
   useEffect(() => {
     if (isLoaded && isSignedIn) {
       // Force full page reload to ensure proper auth state
-      window.location.href = '/dashboard/overview';
+      window.location.href = '/dashboard/data-sepeda';
     }
   }, [isLoaded, isSignedIn]);
 
   return (
     <div className='flex min-h-screen items-center justify-center'>
       <SignUp
-        afterSignUpUrl='/dashboard/overview'
-        redirectUrl='/dashboard/overview'
+        afterSignUpUrl='/dashboard/data-sepeda'
+        redirectUrl='/dashboard/data-sepeda'
       />
     </div>
   );
