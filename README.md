@@ -2,7 +2,7 @@
 
 ---
 
-## Tech Stack yang kami gunakan
+## Tech Stack yang kami gunakan:
 
 - **Framework**: [Next.js](https://nextjs.org/)
 - **Database**: [Supabase](https://supabase.com)
