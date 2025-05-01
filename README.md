@@ -1,4 +1,4 @@
-# IPB Bike Center (Next + Clerk + Shadcn)
+# IPB Bike Center
 
 ---
 
