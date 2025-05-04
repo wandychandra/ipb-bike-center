@@ -1,54 +1,61 @@
+// src/hooks/use-supabase-auth.tsx
 "use client"
 
 import { useUser } from "@clerk/nextjs"
+import type { UserResource } from "@clerk/types"
 import { useEffect, useState } from "react"
 import { supabase } from "@/lib/supabase"
+import { syncUser } from "./sync-user"
 
 export function useSupabaseAuth() {
-  const { user, isLoaded } = useUser()
+  const { user, isLoaded } = useUser() as {
+    user: UserResource | null
+    isLoaded: boolean
+  }
   const [isAdmin, setIsAdmin] = useState(false)
   const [loading, setLoading] = useState(true)
 
-  // Cek apakah user adalah admin
+  // sinkronisasi
   useEffect(() => {
-    const checkAdminStatus = async () => {
-      if (!user || !isLoaded) {
-        setIsAdmin(false)
-        setLoading(false)
-        return
-      }
-
+    if (!isLoaded || !user) return
+    ;(async () => {
       try {
-        // Cek dari metadata Clerk (cara paling sederhana dan cepat)
-        if (user.publicMetadata?.role === "admin") {
-          setIsAdmin(true)
-          setLoading(false)
+        await syncUser(user)
+      } catch (err) {
+        console.error("syncUser error:", err)
+      }
+    })()
+  }, [isLoaded, user])
+
+  // cek admin
+  useEffect(() => {
+    if (!isLoaded) return
+    ;(async () => {
+      setLoading(true)
+      try {
+        if (!user) {
+          setIsAdmin(false)
           return
         }
-
-        // Jika tidak ada di metadata, coba cek di database
-        // Ini opsional, bisa dihapus jika hanya mengandalkan Clerk metadata
-        try {
-          const { data } = await supabase.from("Users").select("role").eq("id", user.id).maybeSingle()
-
-          setIsAdmin(data?.role === "admin")
-        } catch (dbError) {
-          console.log("Tidak bisa mengecek role dari database, hanya menggunakan Clerk metadata")
+        if (user.publicMetadata?.role === "admin") {
+          setIsAdmin(true)
+          return
         }
-      } catch (error) {
-        console.log("Error checking admin status, defaulting to non-admin")
+        const { data, error } = await supabase
+          .from("Users")
+          .select("role")
+          .eq("id", user.id)
+          .maybeSingle()
+        if (error) throw error
+        setIsAdmin(data?.role === "admin")
+      } catch (err) {
+        console.error("Error checking admin status:", err)
+        setIsAdmin(false)
       } finally {
         setLoading(false)
       }
-    }
+    })()
+  }, [isLoaded, user])
 
-    checkAdminStatus()
-  }, [user, isLoaded])
-
-  return {
-    supabase,
-    isAdmin,
-    loading,
-    user,
-  }
+  return { supabase, user, isAdmin, loading }
 }
