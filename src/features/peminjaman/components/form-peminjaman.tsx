@@ -244,7 +244,7 @@ export function FormPeminjaman() {
             </RadioGroup>
             <p className="text-sm text-muted-foreground mt-1">
               {jangkaPeminjaman === "Harian"
-                ? "Sepeda harus dikembalikan pada hari berikutnya"
+                ? "Sepeda harus dikembalikan pada hari yang sama"
                 : "Sepeda harus dikembalikan dalam 2 bulan"}
             </p>
           </div>

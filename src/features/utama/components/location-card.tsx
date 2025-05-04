@@ -24,7 +24,6 @@ function isWithinOperationalHours(hours: string): boolean {
   return currentTime >= start && currentTime <= end;
 }
 
-// Mock data - in a real app, this would come from an API
 type OperationalHours = {
   weekdays: string;
   saturday: string;
@@ -91,12 +90,12 @@ export function LocationCard() {
               ? "bg-green-100 text-green-800 hover:bg-green-100"
               : "bg-red-100 text-red-800 hover:bg-red-100"
           }>
-            {locationData.status.isOpen ? "Buka" : "Tidak Buka"}
+            {locationData.status.isOpen ? "Aktif" : "Tidak Aktif"}
           </Badge>
         </div>
       </CardHeader>
 
-      <div className="relative w-full h-[200px] z-0">
+      <div className="relative w-full h-[300px] z-0">
         <LeafletMap className="aspect-auto h-full w-full" />
       </div>
 

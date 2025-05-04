@@ -38,9 +38,7 @@ export function ModeToggle() {
   );
 
   if (!mounted) return null;
-
   const Icon = resolvedTheme === 'dark' ? IconSunFilled : IconMoonFilled;
-
   return (
     <Button
       variant='secondary'

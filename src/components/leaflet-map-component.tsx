@@ -37,7 +37,7 @@ export function LeafletMapComponent({ className, location }: LeafletMapComponent
     <div className={`${className || ""} overflow-hidden`}>
       <MapContainer
         center={[location.lat, location.lng]}
-        zoom={16}
+        zoom={17}
         style={{ height: "100%", width: "100%" }}
         zoomControl={false}
         attributionControl={false}

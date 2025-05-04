@@ -229,7 +229,7 @@ export default function AboutPage() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground mb-4">
-                    Gedung Graha Widya Wisuda
+                    Bike & Bus Shelter (Dekat Gedung Asrama Kepemimpinan)
                     <br />
                     Kampus IPB Dramaga
                     <br />
@@ -261,13 +261,14 @@ export default function AboutPage() {
                 <CardContent>
                   <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
                     {[
-                      "Gedung Graha Widya Wisuda",
-                      "Perpustakaan Pusat",
+                      "Graha Widya Wisuda",
                       "Gedung Rektorat",
+                      "Perpustakaan LSI",
+                      "Masjid Al-Hurriyyah",
                       "Fakultas Pertanian",
-                      "Fakultas Kehutanan",
                       "Fakultas Peternakan",
-                      "Fakultas Perikanan dan Ilmu Kelautan",
+                      "Fakultas Kehutanan",
+                      "Fakultas Kedokteran",
                     ].map((location, index) => (
                       <li key={index} className="flex items-center gap-2">
                         <div className="h-2 w-2 rounded-full bg-primary"></div>
