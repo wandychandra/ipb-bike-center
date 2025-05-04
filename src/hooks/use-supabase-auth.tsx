@@ -5,7 +5,6 @@ import { useUser } from "@clerk/nextjs"
 import type { UserResource } from "@clerk/types"
 import { useEffect, useState } from "react"
 import { supabase } from "@/lib/supabase"
-import { syncUser } from "./sync-user"
 
 export function useSupabaseAuth() {
   const { user, isLoaded } = useUser() as {
@@ -14,18 +13,6 @@ export function useSupabaseAuth() {
   }
   const [isAdmin, setIsAdmin] = useState(false)
   const [loading, setLoading] = useState(true)
-
-  // sinkronisasi
-  useEffect(() => {
-    if (!isLoaded || !user) return
-    ;(async () => {
-      try {
-        await syncUser(user)
-      } catch (err) {
-        console.error("syncUser error:", err)
-      }
-    })()
-  }, [isLoaded, user])
 
   // cek admin
   useEffect(() => {
