@@ -84,7 +84,7 @@ export function CardPeminjamanAdmin({
       toast.success("Peminjaman berhasil disetujui")
       onStatusUpdate()
     } catch (error: any) {
-      toast.error(error.message || "Terjadi kesalahan saat menyetujui peminjaman")
+      toast.error(error.message || "Terjadi kesalahan saat menyetujui peminjaman", {richColors: true})
     } finally {
       setIsSubmitting(false)
     }
@@ -113,7 +113,7 @@ export function CardPeminjamanAdmin({
       toast.success("Peminjaman berhasil ditolak")
       onStatusUpdate()
     } catch (error: any) {
-      toast.error(error.message || "Terjadi kesalahan saat menolak peminjaman")
+      toast.error(error.message || "Terjadi kesalahan saat menolak peminjaman", {richColors: true})
     } finally {
       setIsSubmitting(false)
     }
@@ -142,7 +142,7 @@ export function CardPeminjamanAdmin({
       toast.success("Peminjaman berhasil diselesaikan")
       onStatusUpdate()
     } catch (error: any) {
-      toast.error(error.message || "Terjadi kesalahan saat menyelesaikan peminjaman")
+      toast.error(error.message || "Terjadi kesalahan saat menyelesaikan peminjaman", {richColors: true})
     } finally {
       setIsSubmitting(false)
     }

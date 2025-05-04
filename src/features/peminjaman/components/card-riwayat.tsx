@@ -83,10 +83,10 @@ export function CardRiwayat({
     try {
       await supabase.from("Peminjaman").update({ statusId: 5 }).eq("id", id)
       await supabase.from("DataSepeda").update({ status: "Tersedia" }).eq("nomorSeri", nomorSeriSepeda)
-      toast.success("Peminjaman berhasil dibatalkan")
+      toast.success("Peminjaman berhasil dibatalkan", {richColors: true})
       onStatusUpdate()
     } catch {
-      toast.error("Gagal membatalkan peminjaman")
+      toast.error("Gagal membatalkan peminjaman", {richColors: true})
     } finally {
       setIsLoading(false)
     }
@@ -106,16 +106,16 @@ export function CardRiwayat({
         await supabase.from("Peminjaman").update({ statusId: 4 }).eq("id", id)
         await supabase.from("DataSepeda").update({ status: "Tersedia" }).eq("nomorSeri", nomorSeriSepeda)
 
-        toast.success("Sepeda berhasil dikembalikan!")
+        toast.success("Sepeda berhasil dikembalikan!", {richColors: true})
         stopCamera()
         setIsQRDialogOpen(false)
         onStatusUpdate()
       } else {
-        toast.error("QR code tidak valid atau tidak sesuai dengan nomor seri sepeda.")
+        toast.error("QR code tidak valid atau tidak sesuai dengan nomor seri sepeda.", {richColors: true})
       }
     } catch (error) {
       console.error("Error processing QR:", error)
-      toast.error("Gagal memproses QR code")
+      toast.error("Gagal memproses QR code", {richColors: true})
     } finally {
       setIsLoading(false)
     }
@@ -170,11 +170,11 @@ export function CardRiwayat({
       if (result) {
         processQRResult(result)
       } else {
-        toast.error("Tidak dapat mendeteksi QR code dalam gambar.")
+        toast.error("Tidak dapat mendeteksi QR code dalam gambar.", {richColors: true})
       }
     } catch (error) {
       console.error("Error scanning image:", error)
-      toast.error("Gagal memindai file QR.")
+      toast.error("Gagal memindai file QR.", {richColors: true})
     } finally {
       setIsLoading(false)
     }

@@ -147,7 +147,7 @@ export default function KelolaPeminjamanPage() {
       setFilteredPeminjaman(enhancedData)
     } catch (error) {
       console.log("Gagal memuat data peminjaman")
-      toast.error("Gagal memuat data peminjaman")
+      toast.error("Gagal memuat data peminjaman", {richColors: true})
       setPeminjaman([])
       setFilteredPeminjaman([])
     } finally {

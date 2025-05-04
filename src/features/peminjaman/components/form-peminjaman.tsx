@@ -48,7 +48,7 @@ export function FormPeminjaman() {
         if (!data || data.length === 0) {
           // Jika tidak ada data, gunakan data dummy untuk testing
           setJenisSepedaOptions(["Gunung", "Lipat", "Keranjang"])
-          toast.warning("Menggunakan data sepeda default")
+          toast.warning("Menggunakan data sepeda default", {richColors: true})
           return
         }
 
@@ -59,7 +59,7 @@ export function FormPeminjaman() {
         console.log("Gagal memuat data jenis sepeda, menggunakan data default")
         // Gunakan data dummy jika terjadi error
         setJenisSepedaOptions(["Gunung", "Lipat", "Keranjang"])
-        toast.warning("Menggunakan data sepeda default")
+        toast.warning("Menggunakan data sepeda default", {richColors: true})
       } finally {
         setIsLoading(false)
       }
@@ -83,22 +83,22 @@ export function FormPeminjaman() {
     e.preventDefault()
 
     if (!tanggalPeminjaman || !jangkaPeminjaman || !jenisSepeda || !nomorTelepon) {
-      toast.error("Mohon lengkapi semua field")
+      toast.error("Mohon lengkapi semua field", {richColors: true})
       return
     }
 
     if (fotoPeminjam.length === 0) {
-      toast.error("Mohon upload foto diri Anda")
+      toast.error("Mohon upload foto diri Anda", {richColors: true})
       return
     }
 
     if (fotoKTM.length === 0) {
-      toast.error("Mohon upload foto KTM Anda")
+      toast.error("Mohon upload foto KTM Anda", {richColors: true})
       return
     }
 
     if (!user?.id) {
-      toast.error("Sesi pengguna tidak valid, silakan login ulang")
+      toast.error("Sesi pengguna tidak valid, silakan login ulang", {richColors: true})
       return
     }
 
@@ -155,7 +155,7 @@ export function FormPeminjaman() {
 
       if (updateError) throw updateError
 
-      toast.success("Pengajuan peminjaman sepeda berhasil diajukan")
+      toast.success("Pengajuan peminjaman sepeda berhasil diajukan", {richColors: true})
 
       // Reset form
       setTanggalPeminjaman(undefined)
@@ -168,7 +168,7 @@ export function FormPeminjaman() {
       // Redirect ke halaman riwayat peminjaman
       router.push("/dashboard/peminjaman/riwayat")
     } catch (error: any) {
-      toast.error(error.message || "Terjadi kesalahan saat mengajukan peminjaman")
+      toast.error(error.message || "Terjadi kesalahan saat mengajukan peminjaman", {richColors: true})
     } finally {
       setIsSubmitting(false)
     }

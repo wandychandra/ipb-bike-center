@@ -99,7 +99,7 @@ export default function RiwayatPeminjamanPage() {
       setPeminjaman(enhancedData)
     } catch (error) {
       console.error("Error fetching peminjaman:", error)
-      toast.error("Gagal memuat data peminjaman")
+      toast.error("Gagal memuat data peminjaman", {richColors: true})
       setPeminjaman([])
     } finally {
       setLoading(false)

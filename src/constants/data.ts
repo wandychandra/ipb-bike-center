@@ -27,7 +27,7 @@ export const adminNavItems: NavItem[] = [
     items: [] // No child items
   },
   {
-    title: 'Peminjaman',
+    title: 'Kelola Peminjaman',
     url: '/admin/peminjaman',
     icon: 'peminjaman',
     shortcut: ['p', 'p'],
@@ -64,7 +64,7 @@ export const navItems: NavItem[] = [
         title: 'Form Peminjaman',
         url: '/dashboard/peminjaman/',
         icon: 'peminjaman',
-        shortcut: ['p', 'p'],
+        shortcut: ['f', 'f'],
         items: [] // No child items
       },
       {
@@ -81,7 +81,7 @@ export const navItems: NavItem[] = [
     url: '/dashboard/about',
     icon: 'help',
     isActive: false,
-    shortcut: ['d', 'd'],
+    shortcut: ['t', 't'],
     items: []
   },
 ];
