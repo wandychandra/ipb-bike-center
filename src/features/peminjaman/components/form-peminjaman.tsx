@@ -132,6 +132,30 @@ export function FormPeminjaman() {
 
       const nomorSeriSepeda = availableBikes[0].nomorSeri
 
+      // Cek apakah peminjam sudah terdaftar di database
+      const { data: existingUser, error: userError } = await supabase
+        .from("Users")
+        .select("id")
+        .eq("id", user.id)
+        .single()
+
+      // Jika user tidak ada, insert user baru
+      if (!existingUser) {
+          const { error: insertError } = await supabase
+            .from("Users")
+            .insert({
+              id: user.id,
+              email: user.emailAddresses?.[0]?.emailAddress ?? "",
+              nomorTelepon: nomorTelepon,
+              nama: user.fullName || user.username || "",
+              role: user.publicMetadata?.role || "user",
+            })
+          if (insertError) {
+            console.error("Error inserting new user:", insertError)
+            throw insertError
+          }
+      }
+
       // Simpan data peminjaman
       const { error } = await supabase.from("Peminjaman").insert({
         userId: user.id, // Use Clerk ID directly
@@ -147,7 +171,7 @@ export function FormPeminjaman() {
 
       if (error) throw error
 
-      // Update status sepeda menjadi 'menunggu persetujuan'
+      // Update status sepeda menjadi 'Dipinjam'
       const { error: updateError } = await supabase
         .from("DataSepeda")
         .update({ status: "Dipinjam" })
