@@ -111,7 +111,7 @@ export function CardRiwayat({
         setIsQRDialogOpen(false)
         onStatusUpdate()
       } else {
-        toast.error("QR code tidak valid atau tidak sesuai dengan nomor seri sepeda.", {richColors: true})
+        toast.error("QR code tidak valid.", {richColors: true})
       }
     } catch (error) {
       console.error("Error processing QR:", error)
@@ -140,7 +140,7 @@ export function CardRiwayat({
       },
       {
         preferredCamera: "environment",
-        maxScansPerSecond: 5,
+        maxScansPerSecond: 25,
         highlightScanRegion: true,
         highlightCodeOutline: true,
         returnDetailedScanResult: true,
@@ -247,10 +247,7 @@ export function CardRiwayat({
               <div className="relative rounded-lg overflow-hidden border border-input">
                 <video ref={videoRef} autoPlay playsInline muted className="w-full h-64 object-cover" />
                 {/* QR Scanner detection box */}
-                <div
-                  ref={scannerBoxRef}
-                  className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 border-2 border-green-500 rounded-lg pointer-events-none"
-                >
+                <div>
                   <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-green-500 rounded-tl"></div>
                   <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-green-500 rounded-tr"></div>
                   <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-green-500 rounded-bl"></div>
