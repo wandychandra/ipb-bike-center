@@ -198,11 +198,7 @@ export function FormPeminjaman() {
     }
   }
 
-  const handleFotoPeminjamUpload = async (files: File[]) => {
-    return Promise.resolve()
-  }
-
-  const handleFotoKTMUpload = async (files: File[]) => {
+  const handleFotoUpload = async (files: File[]) => {
     return Promise.resolve()
   }
 
@@ -317,7 +313,7 @@ export function FormPeminjaman() {
             <FileUploader
               value={fotoPeminjam}
               onValueChange={setFotoPeminjam}
-              onUpload={handleFotoPeminjamUpload}
+              onUpload={handleFotoUpload}
               accept={{ "image/*": [] }}
               maxSize={1024 * 1024 * 2} // 2MB
               maxFiles={1}
@@ -330,7 +326,7 @@ export function FormPeminjaman() {
             <FileUploader
               value={fotoKTM}
               onValueChange={setFotoKTM}
-              onUpload={handleFotoKTMUpload}
+              onUpload={handleFotoUpload}
               accept={{ "image/*": [] }}
               maxSize={1024 * 1024 * 2} // 2MB
               maxFiles={1}

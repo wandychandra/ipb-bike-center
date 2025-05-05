@@ -245,117 +245,117 @@ export function CardPeminjamanAdmin({
 
       {(statusId !== 4 && statusId !== 5) && (
         <Dialog open={isDetailDialogOpen} onOpenChange={setIsDetailDialogOpen}>
-          <DialogContent className="max-w-3xl">
-        <DialogHeader>
-          <DialogTitle>Detail Peminjaman</DialogTitle>
-          <DialogDescription>Detail lengkap peminjaman sepeda</DialogDescription>
-        </DialogHeader>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-4">
-            <div>
-          <h3 className="font-medium mb-2">Informasi Peminjam</h3>
-          <div className="space-y-2">
-            <p className="text-sm">
-              <span className="font-medium">Nama:</span> {namaUser}
-            </p>
-            <p className="text-sm">
-              <span className="font-medium">Email:</span> {emailUser}
-            </p>
-            <p className="text-sm">
-              <span className="font-medium">No. Telepon:</span> {nomorTeleponAktif}
-            </p>
-          </div>
-            </div>
-            <div>
-          <h3 className="font-medium mb-2">Informasi Sepeda</h3>
-          <div className="space-y-2">
-            <p className="text-sm">
-              <span className="font-medium">Merk:</span> {merkSepeda}
-            </p>
-            <p className="text-sm">
-              <span className="font-medium">Jenis:</span> {jenisSepeda}
-            </p>
-            <p className="text-sm">
-              <span className="font-medium">No. Seri:</span> {nomorSeriSepeda}
-            </p>
-          </div>
-            </div>
-            <div>
-          <h3 className="font-medium mb-2">Informasi Peminjaman</h3>
-          <div className="space-y-2">
-            <p className="text-sm">
-              <span className="font-medium">Tanggal Peminjaman:</span>{" "}
-              {format(new Date(tanggalPeminjaman), "dd MMMM yyyy", { locale: LocaleId })}
-            </p>
-            <p className="text-sm">
-              <span className="font-medium">Jangka Waktu:</span>{" "}
-              {jangkaPeminjaman === "Harian" ? "1 Hari" : "2 Bulan"}
-            </p>
-            <p className="text-sm">
-              <span className="font-medium">Tanggal Pengembalian:</span>{" "}
-              {format(new Date(tanggalPengembalian), "dd MMMM yyyy", { locale: LocaleId })}
-            </p>
-            <p className="text-sm">
-              <span className="font-medium">Status:</span>{" "}
-              <Badge className={getStatusColor(statusId)}>{statusNama}</Badge>
-            </p>
-          </div>
+          <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Detail Peminjaman</DialogTitle>
+              <DialogDescription>Detail lengkap peminjaman sepeda</DialogDescription>
+            </DialogHeader>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+          <div>
+            <h3 className="font-medium mb-2">Informasi Peminjam</h3>
+            <div className="space-y-2">
+              <p className="text-sm">
+                <span className="font-medium">Nama:</span> {namaUser}
+              </p>
+              <p className="text-sm">
+                <span className="font-medium">Email:</span> {emailUser}
+              </p>
+              <p className="text-sm">
+                <span className="font-medium">No. Telepon:</span> {nomorTeleponAktif}
+              </p>
             </div>
           </div>
-          <div className="space-y-4">
-            <div>
-          <h3 className="font-medium mb-2">Foto Peminjam</h3>
-          {fotoPeminjam ? (
-            <div className="border rounded-md overflow-hidden">
-              <Image
+          <div>
+            <h3 className="font-medium mb-2">Informasi Sepeda</h3>
+            <div className="space-y-2">
+              <p className="text-sm">
+                <span className="font-medium">Merk:</span> {merkSepeda}
+              </p>
+              <p className="text-sm">
+                <span className="font-medium">Jenis:</span> {jenisSepeda}
+              </p>
+              <p className="text-sm">
+                <span className="font-medium">No. Seri:</span> {nomorSeriSepeda}
+              </p>
+            </div>
+          </div>
+          <div>
+            <h3 className="font-medium mb-2">Informasi Peminjaman</h3>
+            <div className="space-y-2">
+              <p className="text-sm">
+                <span className="font-medium">Tanggal Peminjaman:</span>{" "}
+                {format(new Date(tanggalPeminjaman), "dd MMMM yyyy", { locale: LocaleId })}
+              </p>
+              <p className="text-sm">
+                <span className="font-medium">Jangka Waktu:</span>{" "}
+                {jangkaPeminjaman === "Harian" ? "1 Hari" : "2 Bulan"}
+              </p>
+              <p className="text-sm">
+                <span className="font-medium">Tanggal Pengembalian:</span>{" "}
+                {format(new Date(tanggalPengembalian), "dd MMMM yyyy", { locale: LocaleId })}
+              </p>
+              <p className="text-sm">
+                <span className="font-medium">Status:</span>{" "}
+                <Badge className={getStatusColor(statusId)}>{statusNama}</Badge>
+              </p>
+            </div>
+          </div>
+              </div>
+              <div className="space-y-4">
+          <div>
+            <h3 className="font-medium mb-2">Foto Peminjam</h3>
+            {fotoPeminjam ? (
+              <div className="border rounded-md overflow-hidden">
+                <Image
             src={fotoPeminjam || "/placeholder.svg"}
             alt="Foto Peminjam"
             width={300}
             height={300}
-            className="object-cover"
-              />
-            </div>
-          ) : (
-            <p className="text-sm text-muted-foreground">Tidak ada foto peminjam</p>
-          )}
-            </div>
-            <div>
-          <h3 className="font-medium mb-2">Foto KTM</h3>
-          {fotoKTM ? (
-            <div className="border rounded-md overflow-hidden">
-              <Image
+            className="object-cover justify-center"
+                />
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">Tidak ada foto peminjam</p>
+            )}
+          </div>
+          <div>
+            <h3 className="font-medium mb-2">Foto KTM</h3>
+            {fotoKTM ? (
+              <div className="border rounded-md overflow-hidden">
+                <Image
             src={fotoKTM || "/placeholder.svg"}
             alt="Foto KTM"
             width={300}
             height={300}
             className="object-cover"
-              />
-            </div>
-          ) : (
-            <p className="text-sm text-muted-foreground">Tidak ada foto KTM</p>
-          )}
-            </div>
-            {fotoQRPengembalian && (
-          <div>
-            <h3 className="font-medium mb-2">Foto QR Pengembalian</h3>
-            <div className="border rounded-md overflow-hidden">
-              <Image
+                />
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">Tidak ada foto KTM</p>
+            )}
+          </div>
+          {fotoQRPengembalian && (
+            <div>
+              <h3 className="font-medium mb-2">Foto QR Pengembalian</h3>
+              <div className="border rounded-md overflow-hidden">
+                <Image
             src={fotoQRPengembalian || "/placeholder.svg"}
             alt="Foto QR Pengembalian"
             width={300}
             height={300}
             className="object-cover"
-              />
+                />
+              </div>
             </div>
-          </div>
-            )}
-          </div>
-        </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={() => setIsDetailDialogOpen(false)}>
-            Tutup
-          </Button>
-        </DialogFooter>
+          )}
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsDetailDialogOpen(false)}>
+          Tutup
+              </Button>
+            </DialogFooter>
           </DialogContent>
         </Dialog>
       )}

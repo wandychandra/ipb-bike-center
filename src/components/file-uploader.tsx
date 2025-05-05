@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react"
 import { useDropzone } from "react-dropzone"
 import { FileIcon, X } from "lucide-react"
+import { toast } from "sonner"
 
 type FileUploaderProps = {
   value: File[]
@@ -15,9 +16,17 @@ type FileUploaderProps = {
 
 export function FileUploader({ value, onValueChange, onUpload, accept, maxSize, maxFiles }: FileUploaderProps) {
   const [uploading, setUploading] = useState(false)
+  const maxSizeInMB = maxSize ? maxSize / 1024 / 1024 : 0
 
   const onDrop = useCallback(
-    (acceptedFiles: File[]) => {
+    (acceptedFiles: File[], fileRejections: any[]) => {
+      if (fileRejections.length > 0) {
+        fileRejections.forEach((rejection) => {
+          toast.error(`File ditolak karena ukuran melebihi ${maxSizeInMB} MB`, {richColors: true})
+        })
+        return
+      }
+
       onValueChange(acceptedFiles)
       setUploading(true)
       onUpload(acceptedFiles).finally(() => setUploading(false))

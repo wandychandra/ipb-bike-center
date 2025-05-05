@@ -94,11 +94,6 @@ export const ambilDataSepeda = {
       query = query.in('jenis', jenis);
     }
 
-    // Filter berdasarkan status
-    if (status) {
-      query = query.eq('jenis', status);
-    }
-
     // Mengurutkan berdasarkan nomorSeri secara ascending
     query = query.order('nomorSeri', { ascending: true });
 
