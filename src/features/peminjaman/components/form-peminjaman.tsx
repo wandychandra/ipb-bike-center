@@ -47,7 +47,7 @@ export function FormPeminjaman() {
 
         if (!data || data.length === 0) {
           // Jika tidak ada data, gunakan data dummy untuk testing
-          setJenisSepedaOptions(["Gunung", "Lipat", "Keranjang"])
+          setJenisSepedaOptions(["Gunung", "Keranjang", "Lipat", "Listrik"])
           toast.warning("Menggunakan data sepeda default", {richColors: true})
           return
         }
@@ -58,7 +58,7 @@ export function FormPeminjaman() {
       } catch (error) {
         console.log("Gagal memuat data jenis sepeda, menggunakan data default")
         // Gunakan data dummy jika terjadi error
-        setJenisSepedaOptions(["Gunung", "Lipat", "Keranjang"])
+        setJenisSepedaOptions(["Gunung", "Keranjang", "Lipat", "Listrik"])
         toast.warning("Menggunakan data sepeda default", {richColors: true})
       } finally {
         setIsLoading(false)
@@ -198,11 +198,7 @@ export function FormPeminjaman() {
     }
   }
 
-  const handleFotoPeminjamUpload = async (files: File[]) => {
-    return Promise.resolve()
-  }
-
-  const handleFotoKTMUpload = async (files: File[]) => {
+  const handleFotoUpload = async (files: File[]) => {
     return Promise.resolve()
   }
 
@@ -238,15 +234,20 @@ export function FormPeminjaman() {
                   {tanggalPeminjaman ? format(tanggalPeminjaman, "PPP") : "Pilih tanggal"}
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
+                <PopoverContent className="w-auto p-0">
                 <Calendar
                   mode="single"
                   selected={tanggalPeminjaman}
                   onSelect={setTanggalPeminjaman}
                   initialFocus
-                  disabled={(date) => date < new Date()}
+                  disabled={(date) => {
+                  const now = new Date();
+                  const isSameDay = date.toDateString() === now.toDateString();
+                  const isBefore4PM = now.getHours() < 16;
+                  return date.getTime() < now.setHours(0, 0, 0, 0) || (isSameDay && !isBefore4PM);
+                  }}
                 />
-              </PopoverContent>
+                </PopoverContent>
             </Popover>
           </div>
 
@@ -312,7 +313,7 @@ export function FormPeminjaman() {
             <FileUploader
               value={fotoPeminjam}
               onValueChange={setFotoPeminjam}
-              onUpload={handleFotoPeminjamUpload}
+              onUpload={handleFotoUpload}
               accept={{ "image/*": [] }}
               maxSize={1024 * 1024 * 2} // 2MB
               maxFiles={1}
@@ -325,7 +326,7 @@ export function FormPeminjaman() {
             <FileUploader
               value={fotoKTM}
               onValueChange={setFotoKTM}
-              onUpload={handleFotoKTMUpload}
+              onUpload={handleFotoUpload}
               accept={{ "image/*": [] }}
               maxSize={1024 * 1024 * 2} // 2MB
               maxFiles={1}
