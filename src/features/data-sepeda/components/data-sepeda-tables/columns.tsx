@@ -35,7 +35,7 @@ export const columns: ColumnDef<Sepeda>[] = [
         </Badge>
       );
     },
-    enableColumnFilter: false,
+    enableColumnFilter: true,
     meta: {
       label: 'Jenis Sepeda',
       variant: 'multiSelect',
@@ -63,7 +63,7 @@ export const columns: ColumnDef<Sepeda>[] = [
         </Badge>
       );
     },
-    enableColumnFilter: true,
+    enableColumnFilter: false,
     meta: {
       label: 'Status Sepeda',
       variant: 'select',

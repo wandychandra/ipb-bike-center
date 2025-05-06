@@ -215,8 +215,8 @@ export default function AboutPage() {
 
         <Tabs defaultValue="location" className="w-full">
           <TabsList className="grid w-full grid-cols-2 mb-8">
-            <TabsTrigger value="location">Lokasi & Jam Operasional</TabsTrigger>
-            <TabsTrigger value="contact">Kontak & Media Sosial</TabsTrigger>
+            <TabsTrigger value="location">Lokasi & Operasional</TabsTrigger>
+            <TabsTrigger value="contact">Kontak & Sosial</TabsTrigger>
           </TabsList>
 
           <TabsContent value="location">

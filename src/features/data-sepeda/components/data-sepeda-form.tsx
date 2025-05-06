@@ -27,15 +27,32 @@ import { supabase } from '@/lib/supabase';
 import { toast } from 'sonner';
 
 const formSchema = z.object({
-  nomorSeri: z.string().min(3, {
-    message: 'Nomor seri harus terdiri dari minimal 3 karakter.'
-  }),
-  merk: z.string(),
+  nomorSeri: z
+    .string()
+    .min(5, {
+      message: 'Nomor seri harus terdiri dari minimal 5 karakter.'
+    })
+    .regex(/^[a-zA-Z0-9]+$/, {
+      message: 'Nomor seri hanya boleh mengandung karakter alfanumerik.'
+    }),
+  merk: z
+    .string()
+    .regex(/^[a-zA-Z\s]+$/, {
+      message: 'Merk hanya boleh mengandung karakter alfanumerik dan spasi.'
+    }),
   jenis: z.string(),
   status: z.enum(['Tersedia', 'Dipinjam', 'Sedang Perawatan']),
   tanggalPerawatanTerakhir: z.string().optional(),
   deskripsi: z.string()
 });
+
+function getCurrentDate(): string {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
 
 
 export default function DataSepedaForm({
@@ -50,7 +67,7 @@ export default function DataSepedaForm({
     merk: initialData?.merk || '',
     jenis: initialData?.jenis || '',
     status: initialData?.status as 'Tersedia' | 'Dipinjam' | 'Sedang Perawatan' || 'Tersedia',
-    tanggalPerawatanTerakhir: initialData?.tanggalPerawatanTerakhir || '',
+    tanggalPerawatanTerakhir: initialData?.tanggalPerawatanTerakhir || getCurrentDate(),
     deskripsi: initialData?.deskripsi || ''
   };
 
@@ -104,8 +121,8 @@ export default function DataSepedaForm({
       setTimeout(() => {
         window.location.href = '/admin/data-sepeda';
       }, 1000);
-    } catch (error) {
-      toast.error(`Gagal menyimpan data: ${error instanceof Error ? error.message : String(error)}`, {
+    } catch {
+      toast.error(`Gagal menyimpan data! Cek bagian form yang belum terisi atau ID duplikat!`, {
         richColors: true,
         position: 'top-center',
       });
@@ -197,12 +214,12 @@ export default function DataSepedaForm({
                   </Select>
                   <FormMessage />
                 </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='tanggalPerawatanTerakhir'
-              render={({ field }) => (
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='tanggalPerawatanTerakhir'
+                render={({ field }) => (
                 <FormItem>
                   <FormLabel>Tanggal Perawatan Terakhir</FormLabel>
                   <FormControl>
