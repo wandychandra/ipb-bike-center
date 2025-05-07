@@ -203,7 +203,7 @@ export default function KelolaPeminjamanPage() {
 
   return (
   <PageContainer scrollable={true}>
-    <div className="flex flex-1 flex-col space-y-4 px-2 sm:px-4">
+    <div className='flex flex-1 flex-col space-y-4'>
       <h1 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-center sm:text-left">
       Kelola Peminjaman Sepeda
       </h1>

@@ -1,5 +1,6 @@
 "use client"
 
+import { AlertModal } from '@/components/modal/alert-modal';
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -44,6 +45,7 @@ export function CardRiwayat({
   const { user } = useUser()
 
   const [isLoading, setIsLoading] = useState(false)
+  const [open, setOpen] = useState(false);
   const { supabase } = useSupabaseAuth()
   const [isQRDialogOpen, setIsQRDialogOpen] = useState(false)
   const [isCameraActive, setIsCameraActive] = useState(false)
@@ -81,7 +83,6 @@ export function CardRiwayat({
 
   // Batalkan peminjaman 
   const handleCancel = async () => {
-    if (!confirm("Apakah Anda yakin ingin membatalkan peminjaman ini?")) return
     setIsLoading(true)
     try {
       await supabase.from("Peminjaman").update({ statusId: 5 }).eq("id", id)
@@ -208,6 +209,12 @@ export function CardRiwayat({
 
   return (
     <>
+      <AlertModal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        onConfirm={handleCancel}
+        loading={isLoading}
+      />
       <Card>
         <CardHeader>
           <div className="flex justify-between items-start">
@@ -237,7 +244,7 @@ export function CardRiwayat({
         </CardContent>
         <CardFooter className="flex gap-2">
           {statusId === 1 && (
-            <Button variant="destructive" className="w-full" onClick={handleCancel} disabled={isLoading}>
+            <Button variant="destructive" className="w-full" onClick={() => setOpen(true)}>
               {isLoading ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : "Batalkan Peminjaman"}
             </Button>
           )}

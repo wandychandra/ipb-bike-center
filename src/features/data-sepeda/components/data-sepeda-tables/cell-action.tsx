@@ -63,10 +63,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align='end'>
           <DropdownMenuLabel>Aksi</DropdownMenuLabel>
-
-          <DropdownMenuItem
-            onClick={() => router.push(`/admin/data-sepeda/${data.nomorSeri}`)}
-          >
+          <DropdownMenuItem onClick={() => router.push(`/admin/data-sepeda/${data.nomorSeri}`)}>
             <IconEdit className='mr-2 h-4 w-4' /> Perbarui
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setOpen(true)}>

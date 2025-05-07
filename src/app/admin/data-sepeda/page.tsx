@@ -12,7 +12,7 @@ import { Suspense } from 'react';
 import DataSepedaListingPage from '@/features/data-sepeda/components/data-sepeda-listing';
 
 export const metadata = {
-  title: 'Dashboard: Data Sepeda'
+  title: 'Dashboard Admin: Data Sepeda'
 };
 
 type pageProps = {
