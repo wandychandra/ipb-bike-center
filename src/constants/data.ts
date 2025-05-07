@@ -35,6 +35,14 @@ export const adminNavItems: NavItem[] = [
     items: [] // No child items
   },
   {
+    title: 'Laporan Peminjaman',
+    url: '/admin/laporan',
+    icon: 'history',
+    shortcut: ['l', 'l'],
+    isActive: false,
+    items: [] // No child items
+  },
+  {
     title: 'QR Generator',
     url: '/admin/qr-generator',
     icon: 'qrcode',

@@ -3,10 +3,6 @@ import PageContainer from '@/components/layout/page-container';
 import { Suspense } from 'react';
 import DataSepedaViewPage from '@/features/data-sepeda/components/data-sepeda-view-page';
 
-export const metadata = {
-  title: 'Dashboard: Data Sepeda'
-};
-
 type PageProps = { params: Promise<{ nomorSeri: string }> };
 
 export default async function Page(props: PageProps) {

@@ -43,7 +43,7 @@ type LocationData = {
 
 const operationalHours: OperationalHours = {
   weekdays: "08:00 - 16:00",
-  saturday: "08:00 - 16:00",
+  saturday: "08:00 - 12:00",
   sundayHoliday: "Tutup",
 };
 

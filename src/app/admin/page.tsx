@@ -10,6 +10,6 @@ export default async function AdminDashboard() {
   } else if (isAdmin == true) {
     redirect('/admin/utama');
   } else {
-    redirect('/dashboard/utama');
+    redirect('/admin/utama');
   }
 }

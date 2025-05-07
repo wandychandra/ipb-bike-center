@@ -1,110 +1,89 @@
--- Tabel untuk menyimpan data pengguna
-CREATE TABLE IF NOT EXISTS "Users" (
-  "id" UUID PRIMARY KEY,
-  "email" VARCHAR NOT NULL,
-  "nama" VARCHAR NOT NULL,
-  "nomorTelepon" VARCHAR,
-  "role" VARCHAR DEFAULT 'user',
-  "createdAt" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  "updatedAt" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  "deleted" BOOLEAN DEFAULT FALSE
-);
+-- ============================================================================
+-- Skema Awal Database untuk Sistem Peminjaman Sepeda
+-- 
+-- Tabel:
+-- 1. DataSepeda
+--    - Menyimpan data sepeda, termasuk nomor seri, merk, jenis, status, tanggal perawatan terakhir, dan deskripsi.
+--    - nomorSeri sebagai primary key dan unique.
+--
+-- 2. StatusPeminjaman
+--    - Menyimpan status peminjaman (misal: dipinjam, dikembalikan, dll).
+--    - Memiliki kolom nama yang unik, serta timestamp createdAt dan updatedAt.
+--
+-- 3. Users
+--    - Menyimpan data pengguna, seperti id, email, nama, nomor telepon, role, dan status deleted.
+--    - Memiliki kolom createdAt dan updatedAt untuk pencatatan waktu.
+--
+-- 4. Peminjaman
+--    - Menyimpan data peminjaman sepeda, termasuk userId, nomor seri sepeda, tanggal peminjaman, jangka waktu, tanggal pengembalian, status, nomor telepon aktif, serta foto-foto terkait.
+--    - Memiliki relasi foreign key ke tabel DataSepeda, StatusPeminjaman, dan Users.
+--    - Kolom createdAt dan updatedAt untuk pencatatan waktu.
+--
+-- Fungsi & Trigger:
+-- - update_timestamp: Fungsi untuk memperbarui kolom updatedAt secara otomatis setiap kali terjadi update pada tabel Peminjaman.
+-- - Trigger update_timestamp: Memanggil fungsi update_timestamp sebelum data pada tabel Peminjaman diupdate.
+-- ============================================================================
 
--- Tabel untuk menyimpan data sepeda (mempertahankan struktur asli)
-CREATE TABLE IF NOT EXISTS "DataSepeda" (
-  "nomorSeri" VARCHAR PRIMARY KEY,
-  "merk" VARCHAR NOT NULL,
-  "jenis" VARCHAR NOT NULL,
-  "status" VARCHAR NOT NULL,
-  "tanggalPerawatanTerakhir" DATE NOT NULL,
-  "deskripsi" TEXT,
-  "createdAt" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  "updatedAt" TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
+CREATE TABLE public."DataSepeda" (
+  "nomorSeri" character varying NOT NULL,
+  merk character varying NULL,
+  jenis character varying NULL,
+  status character varying NULL,
+  "tanggalPerawatanTerakhir" date NULL,
+  deskripsi text NULL,
+  CONSTRAINT DataSepeda_pkey PRIMARY KEY ("nomorSeri"),
+  CONSTRAINT DataSepeda_nomorSeri_key UNIQUE ("nomorSeri")
+) WITH (OIDS=FALSE);
 
--- Tabel untuk menyimpan status peminjaman
-CREATE TABLE IF NOT EXISTS "StatusPeminjaman" (
-  "id" SERIAL PRIMARY KEY,
-  "nama" VARCHAR NOT NULL UNIQUE,
-  "createdAt" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  "updatedAt" TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
+CREATE TABLE public."StatusPeminjaman" (
+  id serial NOT NULL,
+  nama character varying NOT NULL,
+  "createdAt" timestamp with time zone NULL DEFAULT now(),
+  "updatedAt" timestamp with time zone NULL DEFAULT now(),
+  CONSTRAINT StatusPeminjaman_pkey PRIMARY KEY (id),
+  CONSTRAINT StatusPeminjaman_nama_key UNIQUE (nama)
+) WITH (OIDS=FALSE);
 
--- Tabel untuk menyimpan data peminjaman
-CREATE TABLE IF NOT EXISTS "Peminjaman" (
-  "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  "userId" UUID NOT NULL REFERENCES "Users"("id"),
-  "nomorSeriSepeda" VARCHAR NOT NULL REFERENCES "DataSepeda"("nomorSeri"),
-  "tanggalPeminjaman" DATE NOT NULL,
-  "jangkaPeminjaman" VARCHAR NOT NULL,
-  "tanggalPengembalian" DATE NOT NULL,
-  "statusId" INTEGER NOT NULL REFERENCES "StatusPeminjaman"("id"),
-  "nomorTeleponAktif" VARCHAR NOT NULL,
-  "fotoPeminjam" VARCHAR,
-  "fotoKTP" VARCHAR,
-  "fotoQRPengembalian" VARCHAR,
-  "createdAt" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  "updatedAt" TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
+CREATE TABLE public."Users" (
+  id text NOT NULL,
+  email character varying NOT NULL,
+  nama character varying NOT NULL,
+  "nomorTelepon" character varying NULL,
+  role character varying NULL DEFAULT 'user'::character varying,
+  "createdAt" timestamp with time zone NULL DEFAULT now(),
+  "updatedAt" timestamp with time zone NULL DEFAULT now(),
+  deleted boolean NULL DEFAULT false,
+  CONSTRAINT Users_pkey PRIMARY KEY (id)
+) WITH (OIDS=FALSE);
 
--- Tabel untuk menyimpan riwayat perawatan sepeda
-CREATE TABLE IF NOT EXISTS "RiwayatPerawatan" (
-  "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  "nomorSeriSepeda" VARCHAR NOT NULL REFERENCES "DataSepeda"("nomorSeri"),
-  "tanggalPerawatan" DATE NOT NULL,
-  "deskripsi" TEXT NOT NULL,
-  "teknisiId" UUID REFERENCES "Users"("id"),
-  "createdAt" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  "updatedAt" TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
+CREATE TABLE public."Peminjaman" (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  "userId" text NOT NULL,
+  "nomorSeriSepeda" character varying NOT NULL,
+  "tanggalPeminjaman" date NOT NULL,
+  "jangkaPeminjaman" character varying NOT NULL,
+  "tanggalPengembalian" date NOT NULL,
+  "statusId" integer NOT NULL,
+  "nomorTeleponAktif" character varying NOT NULL,
+  "fotoPeminjam" character varying NULL,
+  "fotoKTM" character varying NULL,
+  "fotoQRPengembalian" character varying NULL,
+  "createdAt" timestamp with time zone NULL DEFAULT now(),
+  "updatedAt" timestamp with time zone NULL DEFAULT now(),
+  CONSTRAINT Peminjaman_pkey PRIMARY KEY (id),
+  CONSTRAINT Peminjaman_nomorSeriSepeda_fkey FOREIGN KEY ("nomorSeriSepeda") REFERENCES "DataSepeda"("nomorSeri") ON DELETE CASCADE,
+  CONSTRAINT Peminjaman_statusId_fkey FOREIGN KEY ("statusId") REFERENCES "StatusPeminjaman"(id),
+  CONSTRAINT Peminjaman_userId_fkey FOREIGN KEY ("userId") REFERENCES "Users"(id) ON DELETE CASCADE
+) WITH (OIDS=FALSE);
 
--- Mengisi data awal untuk tabel status peminjaman
-INSERT INTO "StatusPeminjaman" ("nama") VALUES 
-  ('Menunggu Persetujuan'), ('Disetujui'), ('Ditolak'), ('Selesai'), ('Dibatalkan')
-ON CONFLICT DO NOTHING;
-
--- Fungsi untuk mengupdate timestamp
-CREATE OR REPLACE FUNCTION update_timestamp()
-RETURNS TRIGGER AS $$
+CREATE FUNCTION public."update_timestamp"() 
+RETURNS trigger AS $$
 BEGIN
   NEW."updatedAt" = NOW();
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
--- Trigger untuk mengupdate timestamp
-CREATE TRIGGER update_users_timestamp
-BEFORE UPDATE ON "Users"
-FOR EACH ROW EXECUTE PROCEDURE update_timestamp();
-
-CREATE TRIGGER update_datasepeda_timestamp
-BEFORE UPDATE ON "DataSepeda"
-FOR EACH ROW EXECUTE PROCEDURE update_timestamp();
-
-CREATE TRIGGER update_peminjaman_timestamp
-BEFORE UPDATE ON "Peminjaman"
-FOR EACH ROW EXECUTE PROCEDURE update_timestamp();
-
-CREATE TRIGGER update_riwayatperawatan_timestamp
-BEFORE UPDATE ON "RiwayatPerawatan"
-FOR EACH ROW EXECUTE PROCEDURE update_timestamp();
-
--- Tambahkan trigger untuk DataSepeda jika tabel sudah ada
-DO $$
-BEGIN
-  IF EXISTS (SELECT FROM pg_tables WHERE schemaname = 'public' AND tablename = 'DataSepeda') THEN
-    -- Pastikan kolom updatedAt ada
-    IF EXISTS (SELECT FROM information_schema.columns 
-               WHERE table_schema = 'public' AND table_name = 'DataSepeda' AND column_name = 'updatedAt') THEN
-      -- Buat trigger
-      CREATE TRIGGER update_datasepeda_timestamp
-      BEFORE UPDATE ON "DataSepeda"
-      FOR EACH ROW EXECUTE PROCEDURE update_timestamp();
-    END IF;
-  END IF;
-END
-$$;
-
-ALTER TABLE public."Peminjaman"
-DROP CONSTRAINT Peminjaman_userId_fkey,
-ADD CONSTRAINT Peminjaman_userId_fkey FOREIGN KEY ("userId") REFERENCES public."Users"(id) ON DELETE CASCADE;
+CREATE TRIGGER update_timestamp
+BEFORE UPDATE ON public."Peminjaman"
+FOR EACH ROW EXECUTE FUNCTION public."update_timestamp"();
