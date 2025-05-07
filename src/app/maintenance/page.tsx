@@ -4,10 +4,6 @@ import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 
-export const metadata = {
-    title: 'IPB Bike Center: Maintenance',
-};
-
 export default function Maintenance() {
     const router = useRouter();
 

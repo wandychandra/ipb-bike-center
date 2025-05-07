@@ -1,11 +1,6 @@
 import ReportDashboard from "@/features/laporan/dashboard-laporan"
 import PageContainer from "@/components/layout/page-container"
 
-export const metadata = {
-  title: "Laporan Peminjaman | IPB Bike Center",
-  description: "Laporan data peminjaman sepeda di IPB Bike Center",
-}
-
 export default async function ReportPage() {
   return (
     <PageContainer scrollable={true}>
