@@ -10,7 +10,7 @@
 - **CSS Framework**: [TailwindCSS](https://tailwindcss.com/)
 - **UI Library**: [shadcn/ui](https://ui.shadcn.com/)
 - **Cloud Deployment**: [Vercel](https://vercel.com/)
-- **Document Generation**: on progress
+- **Document Generation**: [jsPDF](https://www.npmjs.com/package/jspdf) & [jsPDF](https://www.npmjs.com/package/jspdf-autotable)
 
 ---
 
