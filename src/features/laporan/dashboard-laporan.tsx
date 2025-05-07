@@ -132,7 +132,19 @@ export default function ReportDashboard() {
               }))} />
             </TabsContent>
             <TabsContent value="download">
-              <ReportDownload data={filteredData.map(item => ({ ...item, userId: item.userId.toString(), tanggalPengembalian: item.tanggalPengembalian || "" }))} month={selectedMonth} year={selectedYear} />
+              <ReportDownload
+                data={filteredData.map(item => ({
+                  ...item,
+                  userId: item.userId.toString(),
+                  tanggalPengembalian: item.tanggalPengembalian || "",
+                  DataSepeda: {
+                    ...item.DataSepeda,
+                    nomorSeri: item.DataSepeda?.nomorSeri ?? item.nomorSeriSepeda ?? "",
+                  },
+                }))}
+                month={selectedMonth}
+                year={selectedYear}
+              />
             </TabsContent>
           </Tabs>
         </>
