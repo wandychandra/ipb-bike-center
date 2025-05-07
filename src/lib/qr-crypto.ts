@@ -47,13 +47,29 @@ export function decryptQRData(encryptedText: string): string {
     const paddedBase64 = base64.padEnd(base64.length + ((4 - (base64.length % 4)) % 4), "=")
 
     // Decode base64
-    const decoded = atob(paddedBase64)
+    let decoded
+    try {
+      decoded = atob(paddedBase64)
+    } catch (e) {
+      console.error("Base64 decoding error:", e)
+      throw new Error("Invalid QR code format")
+    }
 
     // Split the data and checksum
-    const [encryptedData, checksum] = decoded.split("|")
+    const parts = decoded.split("|")
+    if (parts.length < 2) {
+      throw new Error("Invalid QR code format - missing checksum")
+    }
+
+    // The checksum is the last part
+    const checksum = parts.pop()
+    // Rejoin the rest in case there were additional '|' characters in the data
+    const encryptedData = parts.join("|")
 
     // Verify checksum
-    if (calculateChecksum(encryptedData) !== checksum) {
+    const calculatedChecksum = calculateChecksum(encryptedData)
+    if (calculatedChecksum !== checksum) {
+      console.error(`Checksum mismatch: expected ${checksum}, got ${calculatedChecksum}`)
       throw new Error("Invalid checksum - data may be corrupted")
     }
 
@@ -63,10 +79,14 @@ export function decryptQRData(encryptedText: string): string {
     // Extract the original text (remove timestamp)
     const [originalText] = decrypted.split("|")
 
+    if (!originalText) {
+      throw new Error("Invalid decrypted data format")
+    }
+
     return originalText
   } catch (error) {
     console.error("Decryption error:", error)
-    throw new Error("Failed to decrypt QR data")
+    throw new Error(`Failed to decrypt QR data: ${error instanceof Error ? error.message : "Unknown error"}`)
   }
 }
 
@@ -119,4 +139,44 @@ function calculateChecksum(text: string): string {
 
   // Convert to base36 for a shorter representation
   return sum.toString(36)
+}
+
+/**
+ * Debug function to help diagnose QR code issues
+ * @param encryptedText The encrypted text from QR code
+ * @returns Object with diagnostic information
+ */
+export function debugQRCode(encryptedText: string): Record<string, any> {
+  try {
+    // Convert from URL-safe base64
+    const base64 = encryptedText.replace(/-/g, "+").replace(/_/g, "/")
+
+    // Add padding if needed
+    const paddedBase64 = base64.padEnd(base64.length + ((4 - (base64.length % 4)) % 4), "=")
+
+    // Decode base64
+    const decoded = atob(paddedBase64)
+
+    // Split the data and checksum
+    const parts = decoded.split("|")
+    const checksum = parts.pop()
+    const encryptedData = parts.join("|")
+
+    // Calculate checksum
+    const calculatedChecksum = calculateChecksum(encryptedData)
+
+    return {
+      isValidBase64: true,
+      decodedLength: decoded.length,
+      hasValidFormat: parts.length > 0,
+      expectedChecksum: checksum,
+      calculatedChecksum,
+      checksumMatch: checksum === calculatedChecksum,
+    }
+  } catch (error) {
+    return {
+      isValidBase64: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+    }
+  }
 }
