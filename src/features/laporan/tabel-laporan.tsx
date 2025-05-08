@@ -31,7 +31,7 @@ export function ReportTable({ data }: { data: ReportData[] }) {
   }
 
   return (
-    <div className="rounded-md border">
+    <div className="rounded-md border mb-6">
       <Table>
         <TableHeader>
           <TableRow>
@@ -62,7 +62,7 @@ export function ReportTable({ data }: { data: ReportData[] }) {
                 <TableCell className="hidden sm:table-cell">
                   <div className="truncate max-w-[150px] md:max-w-none">
                     {item.DataSepeda?.merk || "N/A"} ({item.DataSepeda?.jenis || "N/A"})
-                    <div className="md:hidden text-xs text-muted-foreground">
+                    <div className="text-xs text-muted-foreground">
                       {item.DataSepeda?.nomorSeri || "N/A"}
                     </div>
                   </div>
