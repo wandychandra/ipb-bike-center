@@ -321,7 +321,7 @@ export function FormPeminjaman() {
                   });
                 }
               }}
-              placeholder='Masukkan nomor lengkap yang sesuai dengan nama pada KTM'
+              placeholder='Masukkan nama lengkap yang sesuai dengan nama pada KTM'
             />
           </div>
 
