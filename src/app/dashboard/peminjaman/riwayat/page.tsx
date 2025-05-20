@@ -135,7 +135,7 @@ export default function RiwayatPeminjamanPage() {
   }
 
   const peminjamanAktif = peminjaman.filter(
-    (item) => item.statusId === 1 || item.statusId === 2
+    (item) => item.statusId === 1 || item.statusId === 2 || item.statusId === 6
   );
   const peminjamanSelesai = peminjaman.filter(
     (item) => item.statusId === 3 || item.statusId === 4

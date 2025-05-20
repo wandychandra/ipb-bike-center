@@ -18,6 +18,15 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
+import { CalendarIcon } from 'lucide-react';
+import { format } from 'date-fns';
+import { cn } from '@/lib/utils';
 import { Textarea } from '@/components/ui/textarea';
 import { DataSepeda } from '@/constants/database-api';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -122,7 +131,7 @@ export default function DataSepedaForm({
       }, 1000);
     } catch {
       toast.error(
-        `Gagal menyimpan data! Cek bagian form yang belum terisi atau ID duplikat!`,
+        `Gagal menyimpan data! Cek bagian form yang belum terisi atau dirubah atau ID duplikat!`,
         {
           richColors: true,
           position: 'top-center'
@@ -218,25 +227,57 @@ export default function DataSepedaForm({
                   </Select>
                   <FormMessage />
                 </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='tanggalPerawatanTerakhir'
-              render={({ field }) => (
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='tanggalPerawatanTerakhir'
+                render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Tanggal Perawatan Terakhir</FormLabel>
-                  <FormControl>
-                    <Input type='date' {...field} />
-                  </FormControl>
+                  <FormLabel htmlFor='tanggalPerawatanTerakhir'>Tanggal Perawatan Terakhir</FormLabel>
+                  <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                    variant='outline'
+                    className={cn(
+                      'w-full justify-start text-left font-normal',
+                      !field.value && 'text-muted-foreground'
+                    )}
+                    >
+                    <CalendarIcon className='mr-2 h-4 w-4' />
+                    {field.value && !isNaN(new Date(field.value).getTime())
+                      ? format(new Date(field.value), 'PPP')
+                      : 'Pilih tanggal'}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className='w-auto p-0'>
+                    <Calendar
+                    mode='single'
+                    selected={field.value ? new Date(field.value) : undefined}
+                    onSelect={(date) => {
+                      field.onChange(date ? format(date, 'yyyy-MM-dd') : '');
+                    }}
+                    initialFocus
+                    disabled={(date) => {
+                      const now = new Date();
+                      const isSameDay = date.toDateString() === now.toDateString();
+                      const isBefore12PM = now.getHours() < 24;
+                      return (
+                      date.getTime() > now.setHours(0, 0, 0, 0) ||
+                      (isSameDay && !isBefore12PM)
+                      );
+                    }}
+                    />
+                  </PopoverContent>
+                  </Popover>
                   <FormMessage />
                 </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='deskripsi'
-              render={({ field }) => (
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='deskripsi'
+                render={({ field }) => (
                 <FormItem>
                   <FormLabel>Deskripsi</FormLabel>
                   <FormControl>

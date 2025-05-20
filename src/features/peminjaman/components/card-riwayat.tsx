@@ -26,8 +26,9 @@ import {
 import { FileUploader } from '@/components/file-uploader';
 import QrScanner from 'qr-scanner';
 import { validateQRCode } from '@/lib/qr-crypto';
-import { deleteFileFromStorage } from '@/lib/upload-utils';
+import { deleteFileFromStorageSingle } from '@/lib/upload-utils';
 import { useUser } from '@clerk/nextjs';
+import { useEffect } from 'react';
 
 interface CardRiwayatProps {
   id: string;
@@ -75,28 +76,108 @@ export function CardRiwayat({
     }
   };
 
+  // Cek keterlambatan pengembalian
+  const isTerlambat = async () => {
+    if (!tanggalPengembalian) return false;
+    try {
+      // Konversi tanggalPengembalian ke Date (anggap sudah dalam format ISO)
+      const pengembalianDate = parseISO(tanggalPengembalian);
+
+      // Waktu sekarang dalam WIB (UTC+7)
+      const now = new Date();
+      const nowWIB = new Date(now.getTime() + 7 * 60 * 60 * 1000);
+
+      // Hari dalam minggu (0 = Minggu, 1 = Senin, ..., 6 = Sabtu)
+      const dayOfWeek = nowWIB.getUTCDay();
+      const hour = nowWIB.getUTCHours();
+
+      // Cek apakah sudah lewat jam batas
+      let batasJam = null;
+      if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+        // Senin-Jumat
+        batasJam = 16;
+      } else if (dayOfWeek === 6) {
+        // Sabtu
+        batasJam = 12;
+      } else {
+        // Minggu tidak dihitung keterlambatan
+        return false;
+      }
+
+      // Jika sudah lewat jam batas dan tanggalPengembalian < sekarang WIB
+      if (hour >= batasJam && pengembalianDate < nowWIB) {
+        // Jika status masih 2 (aktif), update ke 6 (terlambat)
+        if (statusId === 2) {
+          await supabase.from('Peminjaman').update({ statusId: 6 }).eq('id', id);
+          onStatusUpdate();
+        }
+        return true;
+      }
+      return false;
+    } catch {
+      return false;
+    }
+  };
+
+  // Jalankan cek keterlambatan saat komponen mount atau statusId berubah
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (statusId === 2) {
+      isTerlambat();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [statusId]);
+
   // Warna badge
   const getStatusColor = (statusId: number) => {
     switch (statusId) {
-      case 1:
+      case 1: // Menunggu Persetujuan
         return 'bg-yellow-100 text-yellow-800';
-      case 2:
+      case 2: // Aktif
         return 'bg-green-100 text-green-800';
-      case 3:
+      case 3: // Ditolak
         return 'bg-red-100 text-red-800';
-      case 4:
+      case 4: // Selesai
         return 'bg-blue-100 text-blue-800';
-      case 5:
+      case 5: // Dibatalkan
         return 'bg-gray-100 text-gray-800';
+      case 6: // Terlambat
+        return 'bg-orange-100 text-orange-800';
       default:
         return 'bg-gray-100 text-gray-800';
     }
   };
+  // Fungsi async untuk mengambil nama file dari kolom Supabase Storage (misal: fotoKTM)
+  const getFileNameFromSupabase = async (columnName: string) => {
+    const { data, error } = await supabase
+      .from('Peminjaman')
+      .select(columnName)
+      .eq('id', id)
+      .single();
+
+    const row = data as Record<string, any> | null;
+
+    if (error || !row || !row[columnName]) return '';
+    try {
+      const url = row[columnName] as string;
+      const parts = url.split('/');
+      return parts[parts.length - 1];
+    } catch {
+      return '';
+    }
+  };
+
+  // Contoh penggunaan:
+  // const fileName = await getFileNameFromSupabase('fotoKTM');
 
   // Batalkan peminjaman
   const handleCancel = async () => {
     setIsLoading(true);
     try {
+      let fileNamaKTM = await getFileNameFromSupabase('fotoKTM');
+      let fileNamaPeminjam = await getFileNameFromSupabase('fotoPeminjam');
+      let fileNamaSurat = await getFileNameFromSupabase('suratPeminjaman');
+
       await supabase.from('Peminjaman').update({ statusId: 5 }).eq('id', id);
       await supabase
         .from('DataSepeda')
@@ -106,17 +187,18 @@ export function CardRiwayat({
         .from('Peminjaman')
         .update({ fotoPeminjam: null, fotoKTM: null, suratPeminjaman: null })
         .eq('id', id);
+        
       if (user) {
-        await deleteFileFromStorage(supabase, 'peminjaman', `ktm/${user.id}/`);
-        await deleteFileFromStorage(
+        await deleteFileFromStorageSingle(supabase, 'peminjaman', `ktm/${user.id}/${fileNamaKTM}`);
+        await deleteFileFromStorageSingle(
           supabase,
           'peminjaman',
-          `peminjam/${user.id}/`
+          `peminjam/${user.id}/${fileNamaPeminjam}`
         );
-        await deleteFileFromStorage(
+        await deleteFileFromStorageSingle(
           supabase,
           'peminjaman',
-          `surat/${user.id}/`
+          `surat/${user.id}/${fileNamaSurat}`
         );
       } else {
         throw new Error('User is not authenticated.');
@@ -140,6 +222,10 @@ export function CardRiwayat({
       const isValid = await validateQRCode(result, nomorSeriSepeda);
 
       if (isValid) {
+        let fileNamaKTM = await getFileNameFromSupabase('fotoKTM');
+        let fileNamaPeminjam = await getFileNameFromSupabase('fotoPeminjam');
+        let fileNamaSurat = await getFileNameFromSupabase('suratPeminjaman');
+        
         // Update status peminjaman menjadi "Selesai" (statusId 4)
         await supabase.from('Peminjaman').update({ statusId: 4 }).eq('id', id);
         await supabase
@@ -147,21 +233,21 @@ export function CardRiwayat({
           .update({ status: 'Tersedia' })
           .eq('nomorSeri', nomorSeriSepeda);
 
-        if (user) {
-          await deleteFileFromStorage(supabase, 'peminjaman', `ktm/${user.id}`);
-          await deleteFileFromStorage(
-            supabase,
-            'peminjaman',
-            `peminjam/${user.id}`
-          );
-          await deleteFileFromStorage(
-            supabase,
-            'peminjaman',
-            `surat/${user.id}/`
-          );
-        } else {
-          throw new Error('User is not authenticated.');
-        }
+      if (user) {
+        await deleteFileFromStorageSingle(supabase, 'peminjaman', `ktm/${user.id}/${fileNamaKTM}`);
+        await deleteFileFromStorageSingle(
+          supabase,
+          'peminjaman',
+          `peminjam/${user.id}/${fileNamaPeminjam}`
+        );
+        await deleteFileFromStorageSingle(
+          supabase,
+          'peminjaman',
+          `surat/${user.id}/${fileNamaSurat}`
+        );
+      } else {
+        throw new Error('User is not authenticated.');
+      }
 
         toast.success('Sepeda berhasil dikembalikan!', { richColors: true });
         stopCamera();
@@ -300,7 +386,7 @@ export function CardRiwayat({
               )}
             </Button>
           )}
-          {statusId === 2 && (
+          {statusId === 2 || statusId === 6 && (
             <Button
               variant='outline'
               className='w-full'

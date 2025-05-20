@@ -74,7 +74,8 @@ export function ReportDownload({
       const berlangsungCount = data.filter(
         (item) =>
           item.StatusPeminjaman?.nama === 'Dipinjam' ||
-          item.StatusPeminjaman?.nama === 'Aktif'
+          item.StatusPeminjaman?.nama === 'Aktif' ||
+          item.StatusPeminjaman?.nama === 'Terlambat'
       ).length;
       const uniqueUsers = new Set(data.map((item) => item.userId)).size;
 

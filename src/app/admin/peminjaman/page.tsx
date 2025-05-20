@@ -208,7 +208,7 @@ export default function KelolaPeminjamanPage() {
     (item) => item.statusId === 1
   );
   const peminjamanAktif = filteredPeminjaman.filter(
-    (item) => item.statusId === 2
+    (item) => item.statusId === 2 || item.statusId === 6
   );
   const peminjamanSelesai = filteredPeminjaman.filter(
     (item) => item.statusId === 3 || item.statusId === 4

@@ -12,7 +12,7 @@ export function ReportSummaryCards({ data }: { data: ReportData[] }) {
   // Hitung total peminjaman
   const totalPeminjaman = data.length;
 
-  // Hitung peminjaman yang sudah dikembalikan
+  // Hitung peminjaman yang sudah dikembalikan dan terlambat
   const selesaiCount = data.filter(
     (item) =>
       item.StatusPeminjaman?.nama === 'Selesai' ||
@@ -23,7 +23,8 @@ export function ReportSummaryCards({ data }: { data: ReportData[] }) {
   const berlangsungCount = data.filter(
     (item) =>
       item.StatusPeminjaman?.nama === 'Dipinjam' ||
-      item.StatusPeminjaman?.nama === 'Aktif'
+      item.StatusPeminjaman?.nama === 'Aktif' ||
+      item.StatusPeminjaman?.nama === 'Terlambat'
   ).length;
 
   // Hitung jumlah peminjam unik

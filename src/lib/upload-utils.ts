@@ -98,3 +98,17 @@ export async function deleteFileFromStorage(
     throw new Error(`Gagal menghapus folder dan isinya: ${err.message}`);
   }
 }
+
+// Menghapus file dari storage single berdasarkan nama file
+export async function deleteFileFromStorageSingle(
+  client: SupabaseClient,
+  bucket: string,
+  filePath: string
+): Promise<void> {
+  try {
+    const { error } = await client.storage.from(bucket).remove([filePath]);
+    if (error) throw error;
+  } catch (err: any) {
+    throw new Error(`Gagal menghapus file: ${err.message}`);
+  }
+}

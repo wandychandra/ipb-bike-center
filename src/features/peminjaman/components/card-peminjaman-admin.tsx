@@ -1,5 +1,6 @@
 'use client';
 
+import { AlertModal } from '@/components/modal/alert-modal';
 import { useState } from 'react';
 import {
   Card,
@@ -20,6 +21,7 @@ import {
   User,
   Check,
   X,
+  Loader2,
   Phone,
   Eye
 } from 'lucide-react';
@@ -76,6 +78,8 @@ export function CardPeminjamanAdmin({
 }: PeminjamanAdminCardProps) {
   const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleApprove = async () => {
     setIsSubmitting(true);
@@ -194,6 +198,12 @@ export function CardPeminjamanAdmin({
 
   return (
     <>
+      <AlertModal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        onConfirm={handleReject}
+        loading={isLoading}
+      />
       <Card className='overflow-hidden'>
         <CardHeader className='pb-2'>
           <div className='flex items-start justify-between'>
@@ -251,10 +261,16 @@ export function CardPeminjamanAdmin({
                 size='sm'
                 variant='outline'
                 className='flex items-center gap-1'
-                onClick={handleReject}
+                onClick={() => setOpen(true)}
                 disabled={isSubmitting}
               >
-                <X className='h-4 w-4' /> Tolak
+              {isLoading ? (
+                <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+              ) : (
+                <>
+                  <X className='h-4 w-4' /> Tolak
+                </>
+              )}
               </Button>
               <Button
                 size='sm'
@@ -267,7 +283,7 @@ export function CardPeminjamanAdmin({
             </>
           )}
 
-          {statusId === 2 && ( // Aktif
+          {statusId === 2 || statusId === 6 && ( // Aktif
             <Button
               size='sm'
               variant='outline'
