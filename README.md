@@ -1,12 +1,28 @@
-# IPB Bike Center
+# 🚲 IPB Bike Center
+
+Demo Admin:
+https://github.com/raihanpka/ipb-bike-center/assets/88744379-314d-481e-90e0-948c4d124697
+
+Demo User:
+https://github.com/raihanpka/ipb-bike-center/assets/1375fabc-43e2-4ef8-b43c-594d40eef6fc
 
 ---
 
-## Tech Stack yang kami gunakan:
+## ✨ Fitur Utama
+
+- Layanan Peminjaman Sepeda
+- Autentikasi & Manajemen Pengguna
+- Manajemen Data Sepeda (Admin)
+- Laporan Peminjaman & Generate Dokumen PDF
+- Dashboard Admin
+
+---
+
+## 🛠️ Tech Stack
 
 - **Framework**: [Next.js](https://nextjs.org/)
 - **Database**: [Supabase](https://supabase.com)
-- **Authentication & User Management**: [Clerk](https://clerk.com)
+- **Authentication**: [Clerk](https://clerk.com)
 - **CSS Framework**: [TailwindCSS](https://tailwindcss.com/)
 - **UI Library**: [shadcn/ui](https://ui.shadcn.com/)
 - **Cloud Deployment**: [Vercel](https://vercel.com/)
@@ -14,52 +30,64 @@
 
 ---
 
-## Getting Started
+## 🚀 Getting Started
 
-1. Pertama, clone/salin repositori nya:
+### 1. Clone repositori
 
 ```bash
 git clone https://github.com/raihanpka/ipb-bike-center.git
 cd ipb-bike-center
 ```
 
-2. Lalu, Install dependencies nya:
+### 2. Install dependencies
 
 ```bash
-npm install
+pnpm install
 # atau
-pnpm install (jika punya pnpm di device kamu)
+npm install
 ```
 
-3. Setup Environment Variables sesuai pada file `env.local.examples`
+### 3. Setup Environment Variables
 
-4. Setelah terisi, untuk memulai server development di lokal jalankan:
+Salin file `.env.local.example` menjadi `.env.local` lalu isi sesuai kebutuhan.
+
+### 4. Jalankan server development
 
 ```bash
 npm run dev
 ```
 
-5. Aplikasi ini akan berjalan pada [http://localhost:3000](http://localhost:3000) secara lokal
+Aplikasi akan berjalan di [http://localhost:3000](http://localhost:3000)
 
 ---
 
-## Kontribusi
+## 💻 Pengembangan Lokal
+
+1. Clone kode
+2. Install dependencies
+3. Setup environment variables
+4. Jalankan `npm run dev`
+
+---
+
+## 🤝 Kontribusi
 
 1. Fork repositori ini
 2. Buat branch baru:
    ```bash
    git checkout -b feat/nama-fitur
    ```
-3. Modifikasi sesuai perubahan yang kamu inginkan ✨
-4. Commit lalu push:
+3. Lakukan perubahan yang diinginkan
+4. Commit & push:
    ```bash
    git commit -m "Add your feature"
    git push origin feat/nama-fitur
    ```
-5. Ajukan Pull Request ✅
+5. Ajukan Pull Request
 
 ---
 
-## Lisensi
+## 📄 Lisensi
 
-MIT License. Dibuat oleh Kelompok 1✌️
+MIT License. Dibuat oleh Kelompok 1 - Paralel 2 ✌️
+
