@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { periksaPeminjamanTerlambat } from "@/lib/periksa-peminjaman-terlambat"
-import { kirimEmailKeterlambatanByServer } from "@/app/api/kirim-email/server"
+import { kirimEmailKeterlambatanByServer } from "@/app/api/kirim-email/action"
 
 export const dynamic = "force-dynamic"
 

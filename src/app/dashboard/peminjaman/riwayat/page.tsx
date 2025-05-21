@@ -8,7 +8,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Loader2 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { toast } from 'sonner';
-import { SistemNotifikasiKeterlambatan } from '@/components/sistem-notifikasi-keterlambatan';
 
 type Peminjaman = {
   id: string;
@@ -221,7 +220,6 @@ export default function RiwayatPeminjamanPage() {
         </Tabs>
       </div>
     </PageContainer>
-    <SistemNotifikasiKeterlambatan />
     </>
   );
 }
