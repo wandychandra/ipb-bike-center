@@ -1,9 +1,7 @@
 # 🚲 IPB Bike Center
 
-Demo Admin:
 https://github.com/raihanpka/ipb-bike-center/assets/88744379-314d-481e-90e0-948c4d124697
 
-Demo User:
 https://github.com/raihanpka/ipb-bike-center/assets/1375fabc-43e2-4ef8-b43c-594d40eef6fc
 
 ---
