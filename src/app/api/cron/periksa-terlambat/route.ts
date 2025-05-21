@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { periksaPeminjamanTerlambat } from "@/lib/periksa-peminjaman-terlambat"
+import { kirimEmailKeterlambatanByServer } from "@/app/api/kirim-email/server"
 
 export const dynamic = "force-dynamic"
 
@@ -13,8 +14,9 @@ export async function GET(request: NextRequest) {
 
     // Jalankan pemeriksaan terlambat
     const hasil = await periksaPeminjamanTerlambat()
+    const kirimEmail = await kirimEmailKeterlambatanByServer()
 
-    if (!hasil.sukses) {
+    if (!kirimEmail.sukses || !hasil.sukses) {
       return NextResponse.json({ error: hasil.error }, { status: 500 })
     }
 
