@@ -3,9 +3,8 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
-if (!SUPABASE_URL || !SUPABASE_ANON_KEY || !SUPABASE_SERVICE_ROLE_KEY) {
+if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
   throw new Error('Supabase environment variables are not set');
 }
 
@@ -39,5 +38,5 @@ export function injectAuthToken(token: string) {
 // 3) Buat satu instance Supabase untuk admin
 export const supabaseAdmin = createClient(
   SUPABASE_URL,
-  SUPABASE_SERVICE_ROLE_KEY
+  SUPABASE_ANON_KEY,
 )
