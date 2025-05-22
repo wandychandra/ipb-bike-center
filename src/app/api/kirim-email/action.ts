@@ -2,7 +2,7 @@
 
 import { Resend } from "resend"
 import { EmailKeterlambatan } from "@/components/emails/email-keterlambatan"
-import { format, differenceInDays, differenceInHours, parseISO } from "date-fns"
+import { format, differenceInDays, differenceInHours, differenceInMinutes, parseISO } from "date-fns"
 import { id as localeId } from "date-fns/locale"
 import { supabaseAdmin } from "@/lib/supabase"
 
@@ -57,54 +57,23 @@ export async function kirimEmailKeterlambatanByServer() {
         locale: localeId,
       })
 
-      // Hitung hari keterlambatan dan jam keterlambatan berdasarkan jam tutup
-      const pengembalianDate = parseISO(peminjaman.tanggalPengembalian)
+      // Tentukan batas pengembalian: Senin-Jumat jam 16:00, Sabtu jam 12:00
       const now = new Date()
+      const hari = now.getDay() // 0: Minggu, 1: Senin, ..., 6: Sabtu
 
-      // Buat tanggal batas keterlambatan (jam tutup)
-      let batasTerlambat = new Date(pengembalianDate)
-      const hari = batasTerlambat.getDay() // 0 = Minggu, 1 = Senin, ..., 6 = Sabtu
-
-      if (hari === 0) {
-        // Minggu, tidak dihitung, skip ke Senin berikutnya jam 16:00
-        batasTerlambat.setDate(batasTerlambat.getDate() + 1)
-        batasTerlambat.setHours(16, 0, 0, 0)
-      } else if (hari >= 1 && hari <= 5) {
-        // Senin - Jumat, jam tutup 16:00
-        batasTerlambat.setHours(16, 0, 0, 0)
-      } else if (hari === 6) {
-        // Sabtu, jam tutup 12:00
-        batasTerlambat.setHours(12, 0, 0, 0)
+      let batasPeminjaman = now
+      if (hari === 6) {
+        batasPeminjaman.setHours(12, 0, 0, 0)
+      } else {
+        batasPeminjaman.setHours(16, 0, 0, 0)
       }
 
-      // Koreksi zona waktu ke UTC+7
-      batasTerlambat.setHours(batasTerlambat.getHours() - (batasTerlambat.getTimezoneOffset() / 60 - 7))
+      // Hitung hari keterlambatan
+      const hariTerlambat = differenceInDays(batasPeminjaman, parseISO(peminjaman.tanggalPengembalian))
+      const jamTerlambat = differenceInHours(batasPeminjaman, parseISO(peminjaman.tanggalPengembalian))
+      const menitTerlambat = differenceInMinutes(batasPeminjaman, parseISO(peminjaman.tanggalPengembalian))
 
-      // Jika batasTerlambat hari Minggu, skip ke Senin jam 16:00
-      if (batasTerlambat.getDay() === 0) {
-        batasTerlambat.setDate(batasTerlambat.getDate() + 1)
-        batasTerlambat.setHours(16, 0, 0, 0)
-        batasTerlambat.setHours(batasTerlambat.getHours() - (batasTerlambat.getTimezoneOffset() / 60 - 7))
-      }
-
-      // Hitung keterlambatan hanya pada hari kerja (Senin-Sabtu)
-      let hariTerlambat = 0
-      let jamTerlambat = 0
-      if (now > batasTerlambat) {
-        // Hitung jumlah hari kerja yang dilewati (tidak termasuk Minggu)
-        let temp = new Date(batasTerlambat)
-        while (temp < now) {
-          temp.setDate(temp.getDate() + 1)
-          if (temp.getDay() !== 0) hariTerlambat++
-        }
-        // Hitung jam keterlambatan dari batasTerlambat ke sekarang (jika hariTerlambat == 0)
-        if (hariTerlambat === 0) {
-          jamTerlambat = differenceInHours(now, batasTerlambat)
-        }
-      }
-
-      const hariTerlambatFormat =
-        hariTerlambat > 0 ? `${hariTerlambat} Hari` : jamTerlambat > 0 ? `${jamTerlambat} Jam` : "0 Jam"
+      const waktuTerlambat = hariTerlambat > 0 ? `${hariTerlambat} Hari ${jamTerlambat} Jam` : jamTerlambat > 0 ? `${jamTerlambat} Jam` : `${menitTerlambat} Menit`
 
       // Kirim email menggunakan Resend
       const { data, error: errorKirim } = await resend.emails.send({
@@ -118,7 +87,7 @@ export async function kirimEmailKeterlambatanByServer() {
           nomorSeriSepeda: peminjaman.nomorSeriSepeda,
           tanggalPeminjaman: tanggalPeminjamanFormat,
           tanggalPengembalian: tanggalPengembalianFormat,
-          jamAtauHariTerlambat: hariTerlambatFormat,
+          jamAtauHariTerlambat: waktuTerlambat,
         }),
       })
 
