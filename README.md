@@ -8,11 +8,13 @@ https://github.com/raihanpka/ipb-bike-center/assets/1375fabc-43e2-4ef8-b43c-594d
 
 ## ✨ Fitur Utama
 
-- Layanan Peminjaman Sepeda
-- Autentikasi & Manajemen Pengguna
-- Manajemen Data Sepeda (Admin)
-- Laporan Peminjaman & Generate Dokumen PDF
-- Dashboard Admin
+- Layanan Peminjaman & Pengembalian Sepeda (✅)
+- Autentikasi & Manajemen Akun Pengguna (✅)
+- Dashboard Admin dan Pengguna (✅)
+- Manajemen Data Sepeda bagi Admin (✅)
+- Laporan Peminjaman & Generate Dokumen PDF bagi Admin (✅)
+- Notifikasi Keterlambatan Pengembalian Sepeda via Email (✅)
+- Fitur Tiket untuk Melaporkan Masalah pada Sepeda (🟡)
 
 ---
 
