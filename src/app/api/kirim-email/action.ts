@@ -70,10 +70,10 @@ export async function kirimEmailKeterlambatanByServer() {
 
       // Hitung hari keterlambatan
       const hariTerlambat = differenceInDays(batasPeminjaman, parseISO(peminjaman.tanggalPengembalian))
-      const jamTerlambat = differenceInHours(batasPeminjaman, parseISO(peminjaman.tanggalPengembalian))
+      const jamTerlambat = differenceInHours(batasPeminjaman, parseISO(peminjaman.tanggalPengembalian)) 
       const menitTerlambat = differenceInMinutes(batasPeminjaman, parseISO(peminjaman.tanggalPengembalian))
 
-      const waktuTerlambat = hariTerlambat > 0 ? `${hariTerlambat} Hari ${jamTerlambat} Jam` : jamTerlambat > 0 ? `${jamTerlambat} Jam` : `${menitTerlambat} Menit`
+      const waktuTerlambat = hariTerlambat > 0 ? `${hariTerlambat} Hari` : jamTerlambat > 0 ? `${jamTerlambat} Jam` : `${menitTerlambat} Menit`
 
       // Kirim email menggunakan Resend
       const { data, error: errorKirim } = await resend.emails.send({
