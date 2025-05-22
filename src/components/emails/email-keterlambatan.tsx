@@ -20,22 +20,22 @@ interface PropsEmailKeterlambatan {
   nomorSeriSepeda: string
   tanggalPeminjaman: string
   tanggalPengembalian: string
-  hariTerlambat: number
+  jamAtauHariTerlambat: string
 }
 
 export const EmailKeterlambatan = ({
-  namaUser = "Mahasiswa IPB",
-  merkSepeda = "IPB Bike",
-  jenisSepeda = "Sepeda Keranjang",
-  nomorSeriSepeda = "IPB000",
-  tanggalPeminjaman = "21 Mei 2025",
-  tanggalPengembalian = "21 Mei 2025",
-  hariTerlambat = 1,
+  namaUser,
+  merkSepeda,
+  jenisSepeda,
+  nomorSeriSepeda,
+  tanggalPeminjaman,
+  tanggalPengembalian,
+  jamAtauHariTerlambat,
 }: PropsEmailKeterlambatan) => {
   return (
     <Html>
       <Head />
-      <Preview>Pemberitahuan Keterlambatan Pengembalian Sepeda IPB Bike Center</Preview>
+      <Preview>Pemberitahuan Keterlambatan Pengembalian Sepeda | IPB Bike Center</Preview>
       <Body style={main}>
         <Container style={container}>
           <Img
@@ -69,7 +69,7 @@ export const EmailKeterlambatan = ({
                 <strong>Tanggal Pengembalian Seharusnya:</strong> {tanggalPengembalian}
               </Text>
               <Text style={detailItem}>
-                <strong>Keterlambatan:</strong> {hariTerlambat} hari
+                <strong>Keterlambatan:</strong> {jamAtauHariTerlambat}
               </Text>
             </Section>
 

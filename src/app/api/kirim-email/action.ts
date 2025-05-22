@@ -2,7 +2,7 @@
 
 import { Resend } from "resend"
 import { EmailKeterlambatan } from "@/components/emails/email-keterlambatan"
-import { format, differenceInDays, parseISO } from "date-fns"
+import { format, differenceInDays, differenceInHours, parseISO } from "date-fns"
 import { id as localeId } from "date-fns/locale"
 import { supabaseAdmin } from "@/lib/supabase"
 
@@ -59,6 +59,8 @@ export async function kirimEmailKeterlambatanByServer() {
 
       // Hitung hari keterlambatan
       const hariTerlambat = differenceInDays(new Date(), parseISO(peminjaman.tanggalPengembalian))
+      const jamTerlambat = differenceInHours(new Date(), parseISO(peminjaman.tanggalPengembalian))
+      const hariTerlambatFormat = hariTerlambat > 0 ? `${hariTerlambat} Hari` : `${jamTerlambat} Jam`
 
       // Kirim email menggunakan Resend
       const { data, error: errorKirim } = await resend.emails.send({
@@ -72,7 +74,7 @@ export async function kirimEmailKeterlambatanByServer() {
           nomorSeriSepeda: peminjaman.nomorSeriSepeda,
           tanggalPeminjaman: tanggalPeminjamanFormat,
           tanggalPengembalian: tanggalPengembalianFormat,
-          hariTerlambat: hariTerlambat > 0 ? hariTerlambat : 1,
+          jamAtauHariTerlambat: hariTerlambatFormat,
         }),
       })
 
@@ -86,7 +88,6 @@ export async function kirimEmailKeterlambatanByServer() {
       await supabaseAdmin.from("Peminjaman").update({ notifikasiTerkirim: true }).eq("id", peminjaman.id)
       results.push({ id: peminjaman.id, sukses: true, data })
     }
-
     return { sukses: true, results }
   } catch (error) {
     console.error("Error dalam kirimEmailKeterlambatan:", error)
