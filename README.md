@@ -27,6 +27,7 @@ https://github.com/raihanpka/ipb-bike-center/assets/1375fabc-43e2-4ef8-b43c-594d
 - **UI Library**: [shadcn/ui](https://ui.shadcn.com/)
 - **Cloud Deployment**: [Vercel](https://vercel.com/)
 - **Document Generation**: [jsPDF](https://www.npmjs.com/package/jspdf) & [jsPDF-autotable](https://www.npmjs.com/package/jspdf-autotable)
+- **Email API**: [Resend](https://resend.com)
 
 ---
 
