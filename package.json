@@ -53,6 +53,7 @@
     "@radix-ui/react-toggle": "^1.1.6",
     "@radix-ui/react-toggle-group": "^1.1.7",
     "@radix-ui/react-tooltip": "^1.2.4",
+    "@react-email/components": "^0.0.41",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.49.4",
     "@svgr/webpack": "^8.1.0",
@@ -88,6 +89,7 @@
     "react-resizable-panels": "^2.1.9",
     "react-responsive": "^10.0.1",
     "recharts": "^2.15.3",
+    "resend": "^4.5.1",
     "sharp": "^0.33.5",
     "sonner": "^1.7.4",
     "tailwind-merge": "^3.2.0",
@@ -113,5 +115,5 @@
     "@types/react": "19.0.1",
     "@types/react-dom": "19.0.2"
   },
-  "packageManager": "pnpm@10.10.0+sha512.d615db246fe70f25dcfea6d8d73dee782ce23e2245e3c4f6f888249fb568149318637dca73c2c5c8ef2a4ca0d5657fb9567188bfab47f566d1ee6ce987815c39"
+  "packageManager": "pnpm@10.11.0"
 }

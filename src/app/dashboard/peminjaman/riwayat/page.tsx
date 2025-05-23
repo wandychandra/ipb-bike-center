@@ -135,13 +135,14 @@ export default function RiwayatPeminjamanPage() {
   }
 
   const peminjamanAktif = peminjaman.filter(
-    (item) => item.statusId === 1 || item.statusId === 2
+    (item) => item.statusId === 1 || item.statusId === 2 || item.statusId === 6
   );
   const peminjamanSelesai = peminjaman.filter(
     (item) => item.statusId === 3 || item.statusId === 4
   );
 
   return (
+    <>
     <PageContainer scrollable={true}>
       <div className='flex flex-1 flex-col space-y-4 px-2 sm:px-4'>
         <h1 className='mb-4 text-center text-2xl font-bold sm:mb-6 sm:text-left sm:text-3xl'>
@@ -219,5 +220,6 @@ export default function RiwayatPeminjamanPage() {
         </Tabs>
       </div>
     </PageContainer>
+    </>
   );
 }

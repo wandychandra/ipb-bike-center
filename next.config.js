@@ -23,7 +23,8 @@ const nextConfig = {
 
     return config;
   },
-  transpilePackages: ['geist']
+  transpilePackages: ['geist'],
+  serverExternalPackages: [], // This will use the default list minus any packages you specify
 };
 
 module.exports = nextConfig;

@@ -34,3 +34,9 @@ export function injectAuthToken(token: string) {
   // Supabase v2: pakai setSession untuk inject access_token
   supabase.auth.setSession({ access_token: token, refresh_token: '' });
 }
+
+// 3) Buat satu instance Supabase untuk admin
+export const supabaseAdmin = createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY,
+)

@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect } from 'react';
+import { AlertModal } from '@/components/modal/alert-modal';
 import { useState } from 'react';
 import {
   Card,
@@ -11,7 +13,7 @@ import {
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { id as LocaleId } from 'date-fns/locale';
 import {
   Bike,
@@ -20,6 +22,7 @@ import {
   User,
   Check,
   X,
+  Loader2,
   Phone,
   Eye
 } from 'lucide-react';
@@ -52,6 +55,7 @@ type PeminjamanAdminCardProps = {
   fotoPeminjam: string | null;
   fotoKTM: string | null;
   suratPeminjaman: string | null;
+  notifikasiTerkirim?: boolean;
   onStatusUpdate: () => void;
 };
 
@@ -76,6 +80,60 @@ export function CardPeminjamanAdmin({
 }: PeminjamanAdminCardProps) {
   const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+    // Cek keterlambatan pengembalian
+    const isTerlambat = async () => {
+      if (!tanggalPengembalian) return false;
+      try {
+        // Konversi tanggalPengembalian ke Date (anggap sudah dalam format ISO)
+        const pengembalianDate = parseISO(tanggalPengembalian);
+  
+        // Waktu sekarang dalam WIB (UTC+7)
+        const now = new Date();
+        const nowWIB = new Date(now.getTime() + 7 * 60 * 60 * 1000);
+  
+        // Hari dalam minggu (0 = Minggu, 1 = Senin, ..., 6 = Sabtu)
+        const dayOfWeek = nowWIB.getUTCDay();
+        const hour = nowWIB.getUTCHours();
+  
+        // Cek apakah sudah lewat jam batas
+        let batasJam = null;
+        if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+          // Senin-Jumat
+          batasJam = 16;
+        } else if (dayOfWeek === 6) {
+          // Sabtu
+          batasJam = 12;
+        } else {
+          // Minggu tidak dihitung keterlambatan
+          return false;
+        }
+  
+        // Jika sudah lewat jam batas dan tanggalPengembalian < sekarang WIB
+        if (hour >= batasJam && pengembalianDate < nowWIB) {
+          // Jika status masih 2 (aktif), update ke 6 (terlambat)
+          if (statusId === 2) {
+            await supabase.from('Peminjaman').update({ statusId: 6 }).eq('id', id);
+            onStatusUpdate();
+          }
+          return true;
+        }
+        return false;
+      } catch {
+        return false;
+      }
+    };
+  
+    // Jalankan cek keterlambatan saat komponen mount atau statusId berubah
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => {
+      if (statusId === 2) {
+        isTerlambat();
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [statusId]);
 
   const handleApprove = async () => {
     setIsSubmitting(true);
@@ -194,6 +252,12 @@ export function CardPeminjamanAdmin({
 
   return (
     <>
+      <AlertModal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        onConfirm={handleReject}
+        loading={isLoading}
+      />
       <Card className='overflow-hidden'>
         <CardHeader className='pb-2'>
           <div className='flex items-start justify-between'>
@@ -251,10 +315,16 @@ export function CardPeminjamanAdmin({
                 size='sm'
                 variant='outline'
                 className='flex items-center gap-1'
-                onClick={handleReject}
+                onClick={() => setOpen(true)}
                 disabled={isSubmitting}
               >
-                <X className='h-4 w-4' /> Tolak
+              {isLoading ? (
+                <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+              ) : (
+                <>
+                  <X className='h-4 w-4' /> Tolak
+                </>
+              )}
               </Button>
               <Button
                 size='sm'
@@ -267,7 +337,7 @@ export function CardPeminjamanAdmin({
             </>
           )}
 
-          {statusId === 2 && ( // Aktif
+          {statusId === 2 || statusId === 6 && ( // Aktif
             <Button
               size='sm'
               variant='outline'

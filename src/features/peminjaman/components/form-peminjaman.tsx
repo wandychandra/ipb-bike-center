@@ -217,14 +217,13 @@ export function FormPeminjaman() {
           id: user.id,
           email: user.emailAddresses?.[0]?.emailAddress ?? '',
           nomorTelepon: nomorTelepon,
-          nama: user.fullName || user.username || '',
+          nama: namaLengkap || '',
           role: user.publicMetadata?.role || 'user'
         });
         if (insertError) {
           throw insertError;
         }
       }
-
 
       // Simpan data peminjaman
       const { error } = await supabase.from('Peminjaman').insert({
@@ -239,13 +238,7 @@ export function FormPeminjaman() {
         fotoKTM: fotoKTMUrl,
         suratPeminjaman: suratPeminjamanUrl
       });
-
-      // Simpan nama user berdasarkan nama lengkap di form
-      await supabase
-        .from('Users')
-        .update({ nama: namaLengkap })
-        .eq('id', user.id);
-
+      
       if (error) throw error;
 
       // Update status sepeda menjadi 'Dipinjam'
